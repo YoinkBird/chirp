@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="0dp"
+    tools:context="io.chirp.messenger.MainActivity"
+    android:background="@color/colorPrimaryLight">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/receiveView"
+        android:layout_above="@+id/linearLayout"
+        android:stackFromBottom="true"
+        android:dividerHeight="3dp"
+        android:divider="@null"
+        android:layout_marginBottom="5dp"
+        android:transcriptMode="alwaysScroll" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:layout_above="@+id/versionInfo"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/linearLayout">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:inputType="textMultiLine"
+            android:id="@+id/sendText"
+            android:layout_gravity="left|bottom"
+            android:layout_weight="0.7"
+            android:textColor="@color/colorAccent" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="0.3"
+            android:id="@+id/chirpButton"
+            android:contentDescription="@string/chirpButton"
+            android:onClick="onClick"
+            android:src="@drawable/flash"
+            android:scaleType="centerInside"
+            android:tint="#000000"
+            android:background="@drawable/chirp_button"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="7dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/versionInfo"
+        android:lines="2"
+        android:textAlignment="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/colorAccent"
+        android:textSize="12sp" />
+
+</RelativeLayout>
