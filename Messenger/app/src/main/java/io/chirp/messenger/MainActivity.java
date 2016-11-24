@@ -53,14 +53,29 @@ public class MainActivity extends AppCompatActivity
          * Obtain the chirp's 10-character identifier with `getIdentifier`.
          *----------------------------------------------------------------------------*/
         @Override
-        public void onChirpHeard(Chirp chirp)
+        public void onChirpHeard(final Chirp chirp)
         {
             Log.d(TAG, "onChirpHeard: " + chirp.getIdentifier());
 
             /*------------------------------------------------------------------------------
              * As soon as we hear a chirp, query the API for its associated data.
              *----------------------------------------------------------------------------*/
-            readChirp(chirp);
+//            try
+            {
+              //final String receivedText = (String) chirp.getJsonData().get("text");
+              final String receivedText = chirp.getIdentifier();
+              runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                  Toast.makeText(MainActivity.this, "chirpid: " + receivedText, Toast.LENGTH_SHORT).show();
+                  app.adapter.add(new ChirpMessage(ChirpMessage.Type.RECEIVED, receivedText, chirp.getIdentifier()));
+                }
+              });
+//            } catch (JSONException e) {
+//                Log.d(TAG, e.toString());
+            }
+
+            //readChirp(chirp);
         }
 
         /*------------------------------------------------------------------------------
@@ -167,10 +182,16 @@ public class MainActivity extends AppCompatActivity
 
         ((TextView) findViewById(R.id.sendText)).setText("");
 
+// http://developers.chirp.io/docs/chirp-for-android
+// simple: chirpSDK.chirp(new Chirp("parrotbill"));
+// do: still use 'createChirp' but decode the json?
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("text", sendText);
-            createChirp(jsonObject, sendText);
+            // send directly, i.e. without uploading to chirp server
+            chirpSDK.chirp(new Chirp("parrotbill"));
+            // send indirectly, i.e. upload to chirp server and chirp 'id'
+            // createChirp(jsonObject, sendText);
 
         } catch (JSONException e) {
             Log.d(TAG, e.toString());
