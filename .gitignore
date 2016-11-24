@@ -102,3 +102,7 @@ build
 .idea
 gradle.properties
 local.properties
+
+# custom
+#/Messenger/app/src/main/res/values/secrets.xml
+secrets.xml
