@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, "Error creating Chirp", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error creating Chirp", Toast.LENGTH_SHORT).show();
                     }
                 });
                 Log.d(TAG, "onCreateError: " + chirpError.getMessage());
@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, "Error reading Chirp", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error reading Chirp", Toast.LENGTH_SHORT).show();
                     }
                 });
                 Log.d(TAG, "onReadError: " + chirpError.getMessage());
@@ -335,7 +335,7 @@ public class MainActivity extends AppCompatActivity
         runOnUiThread(new Runnable() {
           @Override
           public void run() {
-            Toast.makeText(MainActivity.this, "chirpid: " + receivedText, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "chirpid: " + receivedText, Toast.LENGTH_SHORT).show();
             app.adapter.add(new ChirpMessage(ChirpMessage.Type.RECEIVED, receivedText, chirp.getIdentifier()));
           }
         });
