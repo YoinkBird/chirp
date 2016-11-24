@@ -57,25 +57,8 @@ public class MainActivity extends AppCompatActivity
         {
             Log.d(TAG, "onChirpHeard: " + chirp.getIdentifier());
 
-            /*------------------------------------------------------------------------------
-             * As soon as we hear a chirp, query the API for its associated data.
-             *----------------------------------------------------------------------------*/
-//            try
-            {
-              //final String receivedText = (String) chirp.getJsonData().get("text");
-              final String receivedText = chirp.getIdentifier();
-              runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                  Toast.makeText(MainActivity.this, "chirpid: " + receivedText, Toast.LENGTH_SHORT).show();
-                  app.adapter.add(new ChirpMessage(ChirpMessage.Type.RECEIVED, receivedText, chirp.getIdentifier()));
-                }
-              });
-//            } catch (JSONException e) {
-//                Log.d(TAG, e.toString());
-            }
-
-            //readChirp(chirp);
+            //readChirpOnline(chirp);
+            readChirpOffline(chirp);
         }
 
         /*------------------------------------------------------------------------------
@@ -242,7 +225,8 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private void readChirp(Chirp chirp)
+    // online chirps
+    private void readChirpOnline(Chirp chirp)
     {
         /*------------------------------------------------------------------------------
          * ChirpSDK.read queries the Chirp API for extended data associated with a
@@ -287,5 +271,28 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "onReadError: " + chirpError.getMessage());
             }
         });
+    }
+
+    // offline chirps
+    private void readChirpOffline(final Chirp chirp)
+    {
+      /*------------------------------------------------------------------------------
+       * As soon as we hear a chirp, query the API for its associated data.
+       *----------------------------------------------------------------------------*/
+      //            try
+      {
+        //final String receivedText = (String) chirp.getJsonData().get("text");
+        final String receivedText = chirp.getIdentifier();
+        runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            Toast.makeText(MainActivity.this, "chirpid: " + receivedText, Toast.LENGTH_SHORT).show();
+            app.adapter.add(new ChirpMessage(ChirpMessage.Type.RECEIVED, receivedText, chirp.getIdentifier()));
+          }
+        });
+        //            } catch (JSONException e) {
+        //                Log.d(TAG, e.toString());
+        }
+
     }
 }
