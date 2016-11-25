@@ -186,6 +186,11 @@ public class MainActivity extends AppCompatActivity
 
         }
       });
+      ((ImageButton) findViewById(R.id.chirpButton2)).setOnClickListener(new OnClickListener() {
+        public void onClick(View v) {
+          Log.d(TAG, "this is abutton");
+        }
+      });
     }
 
     // http://developers.chirp.io/docs/chirp-for-android

@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="1"
-        android:layout_above="@+id/versionInfo"
+        android:layout_above="@+id/linearLayout2"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/linearLayout">
@@ -54,6 +54,35 @@
             android:background="@drawable/chirp_button"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="7dp" />
+
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:layout_above="@+id/versionInfo"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/linearLayout2">
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="0.3"
+            android:id="@+id/chirpButton2"
+            android:contentDescription="@string/chirpButton"
+            android:onClick="onClick"
+            android:src="@drawable/flash"
+            android:scaleType="centerInside"
+            android:tint="#000000"
+            android:background="@drawable/chirp_button"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="7dp" />
+
+
 
     </LinearLayout>
 
