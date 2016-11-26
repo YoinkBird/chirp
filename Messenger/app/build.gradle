@@ -58,6 +58,11 @@ dependencies {
     compile 'joda-time:joda-time:2.3'
     compile 'com.j256.ormlite:ormlite-core:4.48'
     compile 'com.j256.ormlite:ormlite-android:4.48'
+    // https://github.com/snigavig/little-fluffy-location-library
+    compile 'com.littlefluffytoys:LittleFluffyLocationLibrary:18.0.2'
+    // https://github.com/snigavig/little-fluffy-location-library/commit/aa9c6b2b76c4dcac2c1e4be2531769bf1119fc71#diff-bfff767da01cc89c94a0feb6bea83b2eR39
+    compile 'com.google.android.gms:play-services:7.0.0'
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'

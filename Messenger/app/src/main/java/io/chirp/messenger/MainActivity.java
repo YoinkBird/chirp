@@ -10,6 +10,9 @@
 
 package io.chirp.messenger;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.content.Intent;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -187,8 +190,11 @@ public class MainActivity extends AppCompatActivity
         }
       });
       ((ImageButton) findViewById(R.id.chirpButton2)).setOnClickListener(new OnClickListener() {
+        //    Log.d(TAG, "launching location activity");
+        @Override
         public void onClick(View v) {
-          Log.d(TAG, "this is abutton");
+          Intent intent = new Intent(v.getContext(), LocationTestActivity.class);
+          startActivity(intent);
         }
       });
     }

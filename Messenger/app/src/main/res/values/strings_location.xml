@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="location_app_name_my">Test Client for Little Fluffy Location Library</string>
+    <string name="location_library_name">io.chirp.messenger</string>
+</resources>
