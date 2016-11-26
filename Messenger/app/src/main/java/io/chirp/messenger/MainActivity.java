@@ -139,10 +139,12 @@ public class MainActivity extends AppCompatActivity
         /*------------------------------------------------------------------------------
          * Audio permissions are required for Chirp I/O.
          *----------------------------------------------------------------------------*/
+/* if sdk is marshmallow...
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, RESULT_REQUEST_RECORD_AUDIO);
             return false;
         }
+        */
         return true;
     }
 

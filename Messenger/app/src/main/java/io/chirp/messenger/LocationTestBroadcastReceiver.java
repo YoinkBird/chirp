@@ -33,14 +33,13 @@ public class LocationTestBroadcastReceiver extends BroadcastReceiver {
         String text1 = "Locaton updated " + locationInfo.getTimestampAgeInSeconds() + " seconds ago";
         String title = "Location update broadcast received";
         String text2 = "Timestamped " + LocationInfo.formatTimeAndDay(locationInfo.lastLocationUpdateTimestamp, true);
-        /*
         Notification notification = new Notification(
             icon,
             text1,
             time);
         notification.setLatestEventInfo(context, title, text2, contentPendingIntent);
-        */
 
+        /*
         //   src: http://stackoverflow.com/a/16857681
         //   src: http://stackoverflow.com/a/33085754
         //   https://developer.android.com/sdk/api_diff/23/changes/android.app.Notification.html#android.app.Notification.setLatestEventInfo_removed%28android.content.Context,%20java.lang.CharSequence,%20java.lang.CharSequence,%20android.app.PendingIntent%29
@@ -50,6 +49,7 @@ public class LocationTestBroadcastReceiver extends BroadcastReceiver {
           .setSmallIcon(icon).setTicker(text2).setWhen(time)
           .setAutoCancel(true).setContentTitle(title)
           .setContentText(text1).build();
+        */
 
         // Trigger the notification.
         ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(1234, notification);

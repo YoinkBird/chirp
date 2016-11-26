@@ -1,20 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 22
     buildToolsVersion "23.0.2"
-
     File signFile = rootProject.file('../../keystore/keystore.properties')
-
     if (signFile.exists()) {
         Properties properties = new Properties()
         properties.load(new FileInputStream(signFile))
     }
-
     defaultConfig {
         applicationId "io.chirp.messenger"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 22
         versionCode 4
         versionName "1.0.3"
     }
@@ -67,7 +64,8 @@ dependencies {
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1'
+    // http://stackoverflow.com/a/32116705
+    compile 'com.android.support:appcompat-v7:22.1.1'
     // Execution failed for task ':app:transformClassesWithDexForDebug'.
     // https://developer.android.com/topic/libraries/support-library/features.html#multidex
     // compile 'com.android.support:multidex:1.0.0'
