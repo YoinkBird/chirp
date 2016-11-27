@@ -66,6 +66,11 @@ public class MainActivity extends AppCompatActivity
 
             //readChirpOnline(chirp);
             readChirpOffline(chirp);
+
+            // SEND LOCATION TO "SERVER" once the beacon is received
+            // chirp is the beacon, for now don't check which one
+            // launch the location activity in order to send the current GPS coordinates
+            startLocationActivity();
         }
 
         /*------------------------------------------------------------------------------
@@ -188,7 +193,7 @@ public class MainActivity extends AppCompatActivity
       ((ImageButton) findViewById(R.id.chirpButton)).setOnClickListener(new OnClickListener() {
         public void onClick(View view) {
           String sendText = ((TextView) findViewById(R.id.sendText)).getText().toString();
-          // hack for dev
+          // hack for dev - send the broadcast id when the button is pressed
           if (sendText.length() == 0){
             sendText = "parrotbill";
             //return;
@@ -200,12 +205,12 @@ public class MainActivity extends AppCompatActivity
 
         }
       });
+      // button to open the location activity
       ((ImageButton) findViewById(R.id.chirpButton2)).setOnClickListener(new OnClickListener() {
         //    Log.d(TAG, "launching location activity");
         @Override
         public void onClick(View v) {
-          Intent intent = new Intent(v.getContext(), LocationTestActivity.class);
-          startActivity(intent);
+          startLocationActivity();
         }
       });
     }
@@ -378,5 +383,9 @@ public class MainActivity extends AppCompatActivity
         //                Log.d(TAG, e.toString());
         }
 
+    }
+    private void startLocationActivity(){
+      Intent intent = new Intent(getApplicationContext(), LocationTestActivity.class);
+      startActivity(intent);
     }
 }
