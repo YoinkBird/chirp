@@ -114,15 +114,22 @@ public class MainActivity extends AppCompatActivity
     }
 
     protected void chirp_onCreate() {
+        // process intent
         Intent intent = getIntent();
         Bundle intentExtras = intent.getExtras();
         if ( intentExtras != null ){
-          float lastLat = intentExtras.getFloat("LAT");
-          float lastLong = intentExtras.getFloat("LONG");
-          String gpsInfo = "LAT: " + lastLat + "LONG: " + lastLong;
-          Toast.makeText(getApplicationContext(), "LAT: " + lastLat + "LONG: " + lastLong, Toast.LENGTH_LONG).show();
-          Log.d(TAG, "chirp received GPS " + gpsInfo);
+          // Client - Process GPS data, i.e. determine whether on-time or not
+          // src: http://stackoverflow.com/a/13408731
+          if(intentExtras.containsKey("LAT") && intentExtras.containsKey("LONG") ){
+            float lastLat = intentExtras.getFloat("LAT");
+            float lastLong = intentExtras.getFloat("LONG");
+            String gpsInfo = "LAT: " + lastLat + ",LONG: " + lastLong;
+            Toast.makeText(getApplicationContext(), gpsInfo, Toast.LENGTH_LONG).show();
+            Log.d(TAG, "chirp received GPS " + gpsInfo);
+            Log.d(TAG, Integer.toString(ServerAdapter.is_client_punctual(lastLat,lastLong)) );
+          }
         }
+        // < process intent />
 
 
         /*------------------------------------------------------------------------------
