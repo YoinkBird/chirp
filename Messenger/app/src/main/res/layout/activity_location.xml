@@ -62,5 +62,8 @@
     <Button android:id="@+id/location_getlocation"
       android:layout_width="0dp" android:layout_weight="1" android:layout_margin="5dp"
       android:layout_height="wrap_content" android:text="Get location" />
+    <Button android:id="@+id/location_send_gps"
+      android:layout_width="0dp" android:layout_weight="1" android:layout_margin="5dp"
+      android:layout_height="wrap_content" android:text="Send location" />
   </LinearLayout>
 </LinearLayout>

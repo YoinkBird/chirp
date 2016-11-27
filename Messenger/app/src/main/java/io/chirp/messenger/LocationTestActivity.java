@@ -66,6 +66,7 @@ public class LocationTestActivity extends Activity {
   private void refreshDisplay(final LocationInfo locationInfo) {
     final View locationTable = findViewById(R.id.location_table);
     final Button buttonShowMap = (Button) findViewById(R.id.location_showmap);
+    final Button buttonSendGPS = (Button) findViewById(R.id.location_send_gps);
     final TextView locationTextView = (TextView) findViewById(R.id.location_title);
 
     if (locationInfo.anyLocationDataReceived()) {
@@ -85,6 +86,15 @@ public class LocationTestActivity extends Activity {
       buttonShowMap.setOnClickListener(new OnClickListener() {
         public void onClick(View v) {
           Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + locationInfo.lastLat + "," + locationInfo.lastLong + "?q=" + locationInfo.lastLat + "," + locationInfo.lastLong + "(" + locationInfo.lastAccuracy + "m at " + LocationInfo.formatTimeAndDay(locationInfo.lastLocationUpdateTimestamp, true) + ")"));
+          startActivity(intent);
+        }
+      });
+      buttonSendGPS.setVisibility(View.VISIBLE);
+      buttonSendGPS.setOnClickListener(new OnClickListener() {
+        public void onClick(View v) {
+          Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+          intent.putExtra("LAT", locationInfo.lastLat);
+          intent.putExtra("LONG", locationInfo.lastLong);
           startActivity(intent);
         }
       });

@@ -108,6 +108,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     protected void chirp_onCreate() {
+        Intent intent = getIntent();
+        Bundle intentExtras = intent.getExtras();
+        if ( intentExtras != null ){
+          float lastLat = intentExtras.getFloat("LAT");
+          float lastLong = intentExtras.getFloat("LONG");
+          String gpsInfo = "LAT: " + lastLat + "LONG: " + lastLong;
+          Toast.makeText(getApplicationContext(), "LAT: " + lastLat + "LONG: " + lastLong, Toast.LENGTH_LONG).show();
+          Log.d(TAG, "chirp received GPS " + gpsInfo);
+        }
+
+
         /*------------------------------------------------------------------------------
          * A ChirpSDK object wraps up the general SDK functionality.
          * Pass it your app credentials to authenticate.
