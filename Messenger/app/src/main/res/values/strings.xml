@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Chirp Messenger</string>
+    <string name="app_name">Automatic Chirp-in</string>
     <string name="chirpButton">Chirp</string>
 </resources>
