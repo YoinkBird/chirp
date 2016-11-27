@@ -126,7 +126,9 @@ public class MainActivity extends AppCompatActivity
             String gpsInfo = "LAT: " + lastLat + ",LONG: " + lastLong;
             Toast.makeText(getApplicationContext(), gpsInfo, Toast.LENGTH_LONG).show();
             Log.d(TAG, "chirp received GPS " + gpsInfo);
-            Log.d(TAG, Integer.toString(ServerAdapter.is_client_punctual(lastLat,lastLong)) );
+            LocationState myLocation = new LocationState(lastLat, lastLong);
+            // Log.d(TAG, Integer.toString( myLocation.is_punctual() ) );
+            Log.d(TAG, myLocation.is_punctual_friendly() );
           }
         }
         // < process intent />
