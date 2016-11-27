@@ -26,7 +26,7 @@ public class LocationTestActivity extends Activity {
 
     ((Button) findViewById(R.id.location_refresh)).setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
-        refreshDisplay();
+        location_refreshDisplay();
       }
     });
     ((Button) findViewById(R.id.location_forcelocation)).setOnClickListener(new OnClickListener() {
@@ -40,11 +40,14 @@ public class LocationTestActivity extends Activity {
   @Override
   public void onResume() {
     super.onResume();
+    location_onResume();
+  }
 
+  public void location_onResume() {
     // cancel any notification we may have received from LocationTestBroadcastReceiver
     ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(1234);
 
-    refreshDisplay();
+    location_refreshDisplay();
 
     // This demonstrates how to dynamically create a receiver to listen to the location updates.
     // You could also register a receiver in your manifest.
@@ -55,15 +58,18 @@ public class LocationTestActivity extends Activity {
   @Override
   public void onPause() {
     super.onPause();
+    location_onPause();
+  }
 
+  public void location_onPause() {
     unregisterReceiver(lftBroadcastReceiver);
   }
 
-  private void refreshDisplay() {
-    refreshDisplay(new LocationInfo(this));
+  private void location_refreshDisplay() {
+    location_refreshDisplay(new LocationInfo(this));
   }
 
-  private void refreshDisplay(final LocationInfo locationInfo) {
+  private void location_refreshDisplay(final LocationInfo locationInfo) {
     final View locationTable = findViewById(R.id.location_table);
     final Button buttonShowMap = (Button) findViewById(R.id.location_showmap);
     final Button buttonSendGPS = (Button) findViewById(R.id.location_send_gps);
@@ -92,10 +98,7 @@ public class LocationTestActivity extends Activity {
       buttonSendGPS.setVisibility(View.VISIBLE);
       buttonSendGPS.setOnClickListener(new OnClickListener() {
         public void onClick(View v) {
-          Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-          intent.putExtra("LAT", locationInfo.lastLat);
-          intent.putExtra("LONG", locationInfo.lastLong);
-          startActivity(intent);
+          sendLocationToActivity(locationInfo);
         }
       });
     }
@@ -112,7 +115,16 @@ public class LocationTestActivity extends Activity {
       // extract the location info in the broadcast
       final LocationInfo locationInfo = (LocationInfo) intent.getSerializableExtra(LocationLibraryConstants.LOCATION_BROADCAST_EXTRA_LOCATIONINFO);
       // refresh the display with it
-      refreshDisplay(locationInfo);
+      location_refreshDisplay(locationInfo);
+      // send info to main activity
+      sendLocationToActivity(locationInfo);
     }
   };
+
+  private void sendLocationToActivity(final LocationInfo locationInfo){
+    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+    intent.putExtra("LAT", locationInfo.lastLat);
+    intent.putExtra("LONG", locationInfo.lastLong);
+    startActivity(intent);
+  }
 }

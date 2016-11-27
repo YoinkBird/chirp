@@ -56,12 +56,4 @@ public class LocationTestBroadcastReceiver extends BroadcastReceiver {
         
     }
 }
-/*
-NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                        this);
-notification = builder.setContentIntent(contentIntent)
-                      .setSmallIcon(icon).setTicker(text).setWhen(time)
-                      .setAutoCancel(true).setContentTitle(title)
-                      .setContentText(text).build();
-mNM.notify(NOTIFICATION, notification);
-*/
+
