@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final int RESULT_REQUEST_RECORD_AUDIO = 0;
     private static final String TAG = "Messenger";
+    public final static String BROADCAST_ID = "doctorpaul";
 
     private MessengerApplication app;
     private ChirpSDK chirpSDK;
@@ -195,7 +196,7 @@ public class MainActivity extends AppCompatActivity
           String sendText = ((TextView) findViewById(R.id.sendText)).getText().toString();
           // hack for dev - send the broadcast id when the button is pressed
           if (sendText.length() == 0){
-            sendText = "parrotbill";
+            sendText = BROADCAST_ID;
             //return;
           }
 
