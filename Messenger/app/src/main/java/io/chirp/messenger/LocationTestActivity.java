@@ -1,9 +1,5 @@
 package io.chirp.messenger;
 
-import com.littlefluffytoys.littlefluffylocationlibrary.LocationInfo;
-import com.littlefluffytoys.littlefluffylocationlibrary.LocationLibrary;
-import com.littlefluffytoys.littlefluffylocationlibrary.LocationLibraryConstants;
-
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -12,18 +8,28 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.littlefluffytoys.littlefluffylocationlibrary.LocationInfo;
+import com.littlefluffytoys.littlefluffylocationlibrary.LocationLibrary;
+import com.littlefluffytoys.littlefluffylocationlibrary.LocationLibraryConstants;
+
 public class LocationTestActivity extends Activity {
+  private static final String TAG = "LocationTestActivity";
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_location);
+    //setContentView(R.layout.activity_main);
 
+    // always force an update
+    //LocationLibrary.forceLocationUpdate(LocationTestActivity.this);
+    forceLocationUpdate(LocationTestActivity.this);
     ((Button) findViewById(R.id.location_refresh)).setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
         location_refreshDisplay();
@@ -31,8 +37,7 @@ public class LocationTestActivity extends Activity {
     });
     ((Button) findViewById(R.id.location_forcelocation)).setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
-        LocationLibrary.forceLocationUpdate(LocationTestActivity.this);
-        Toast.makeText(getApplicationContext(), "Forcing a location update", Toast.LENGTH_SHORT).show();
+        forceLocationUpdate(LocationTestActivity.this);
       }
     });
   }
@@ -121,6 +126,12 @@ public class LocationTestActivity extends Activity {
     }
   };
 
+  private void forceLocationUpdate(Context context){
+    String message = "Forcing a location update";
+    Toast.makeText(getApplicationContext(), "Forcing a location update", Toast.LENGTH_SHORT).show();
+    Log.d(getApplicationContext().getPackageName(), message);
+    LocationLibrary.forceLocationUpdate(context);
+  }
   private void sendLocationToActivity(final LocationInfo locationInfo){
     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
     intent.putExtra("LAT", locationInfo.lastLat);
