@@ -1,6 +1,11 @@
 package io.chirp.messenger;
 public class LocationState {
   private int punctuality = 0;
+  private static String[] friendly = new String[]{
+            "not going to make it",
+            "good trajectory",
+            "already within office GPS radius",
+    };
   private float gps_lat;
   private float gps_long;
   public LocationState(){
@@ -19,14 +24,24 @@ public class LocationState {
   public int is_punctual(){
     // return code
     int rc = 0;
-    // MOCK: hard-code
+    // server request
+    // rc = blah blah blah
+    // mock request
+    rc = this.mock_calculate_dist();
+    return rc;
+  }
+
+  // MOCK: hard-code
+  public int mock_calculate_dist(){
+    // return code
+    int rc = 0;
     // tolerance - "on-time" range
-    int tolerance = 5;
+    float tolerance = 0.003f;
     // boundary - border of office
-    int boundary  = 1;
+    float boundary  = 0.001f;
     // lat+long of office
-    int office_lat  = 50;
-    int office_long = 50;
+    float office_lat=30.2758021f;
+    float office_lon=-97.7331734f;
     // 0 : not going to make it - out of tolerance
     if(this.gps_lat < ( office_lat - tolerance) && 
        this.gps_lat > ( office_lat + tolerance) ){
@@ -49,11 +64,9 @@ public class LocationState {
   public String is_punctual_friendly(){
     this.is_punctual();
 
-    String[] friendly = new String[]{
-            "not going to make it",
-            "good trajectory",
-            "already within office GPS radius",
-    };
     return friendly[this.punctuality];
   }
 }
+/*
+	<wpt lat="30.2758021" lon="-97.7331734">
+ */

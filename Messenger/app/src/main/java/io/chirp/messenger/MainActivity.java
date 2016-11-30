@@ -14,6 +14,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -128,7 +130,10 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "chirp received GPS " + gpsInfo);
             LocationState myLocation = new LocationState(lastLat, lastLong);
             // Log.d(TAG, Integer.toString( myLocation.is_punctual() ) );
+            String msg = myLocation.is_punctual_friendly();
+            Toast.makeText(getApplicationContext(), msg , Toast.LENGTH_LONG).show();
             Log.d(TAG, myLocation.is_punctual_friendly() );
+            // now decide whether to listen for chirp or not, etc
           }
         }
         // < process intent />
