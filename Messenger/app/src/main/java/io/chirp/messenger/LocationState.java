@@ -18,10 +18,20 @@ public class LocationState {
     this.gps_long = lastLong;
   }
 
+  // simple check: in office, or not in office?
+  public boolean is_punctual(){
+    if(this.get_punctuality() == 2){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // slightly more information than is_punctual
   // 0 : not going to make it
   // 1 : good trajectory
   // 2 : already within office GPS radius
-  public int is_punctual(){
+  public int get_punctuality(){
     // return code
     int rc = 0;
     // server request
@@ -62,7 +72,8 @@ public class LocationState {
   }
 
   public String is_punctual_friendly(){
-    this.is_punctual();
+    // make sure values are up-to-date
+    this.get_punctuality();
 
     return friendly[this.punctuality];
   }
