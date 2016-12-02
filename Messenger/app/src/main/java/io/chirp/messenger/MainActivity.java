@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity
     public final static String BROADCAST_ID = "doctorpaul";
     // for demo: vars used to ensure that chirp is only called once
     public static boolean inOffice = false;
-    public static int     officeGpsCheckins = 0;
+    public static int     officeGpsCheckins = 2; // '2' disables chirp
 
     private MessengerApplication app;
     private ChirpSDK chirpSDK;
