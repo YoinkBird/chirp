@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity
       });
       // button to send a chirp
       // here: office manual reply
-      ((ImageButton) findViewById(R.id.chirpButton)).setOnClickListener(new OnClickListener() {
+      ((ImageButton) findViewById(R.id.chirpButton3)).setOnClickListener(new OnClickListener() {
         public void onClick(View view) {
           String sendText = BROADCAST_ID_OFFICE;
           // createChirpOnline(sendText);
@@ -340,6 +340,7 @@ public class MainActivity extends AppCompatActivity
        * Play the chirp from the device's speaker.
        *----------------------------------------------------------------------------*/
       chirpSDK.chirp(new Chirp(sendText));
+      /* don't display the outgoing chirp - Toast it instead
       // display the chirp
       runOnUiThread(new Runnable() {
           @Override
@@ -347,7 +348,9 @@ public class MainActivity extends AppCompatActivity
               app.adapter.add(new ChirpMessage(ChirpMessage.Type.SENT, sendText, sendText));
           }
       });
+      */
       Log.d(TAG, "sendOfflineChirp: " + chirpId);
+      Toast.makeText(getApplicationContext(), "sent: " + chirpId, Toast.LENGTH_SHORT).show();
     }
     // send indirectly, i.e. upload to chirp server and chirp 'id'
     private void createChirpOnline(final String sendText){
@@ -462,8 +465,9 @@ public class MainActivity extends AppCompatActivity
        *----------------------------------------------------------------------------*/
       //            try
       {
-        //final String receivedText = (String) chirp.getJsonData().get("text");
         final String receivedText = chirp.getIdentifier();
+        /* don't display the outgoing chirp
+        // display the chirp - return the string and let something else display it
         runOnUiThread(new Runnable() {
           @Override
           public void run() {
@@ -471,6 +475,7 @@ public class MainActivity extends AppCompatActivity
             app.adapter.add(new ChirpMessage(ChirpMessage.Type.RECEIVED, receivedText, chirp.getIdentifier()));
           }
         });
+        */
         //            } catch (JSONException e) {
         //                Log.d(TAG, e.toString());
         return receivedText;
@@ -586,40 +591,61 @@ public class MainActivity extends AppCompatActivity
   // For Demo:
   // PATIENT: display the beacon value
   // OFFICE: display the beacon value
-  private void processIncomingChirp(String chirpId){
+  private void processIncomingChirp(final String chirpId){
     Toast.makeText(getApplicationContext(), "processIncomingChirp " + chirpId, Toast.LENGTH_LONG).show();
+    Log.d(getApplicationContext().getPackageName(), "processIncomingChirp " + chirpId);
     // OFFICE processing - chirp back if visitor id received
     if( chirpId.equals(BROADCAST_ID_VISITOR) ){
       officePatientCheckins++;
-      if(! visitorCheckedIn){
+// something is preventing this from working correctly, disabling
+//      if(! visitorCheckedIn){
         // only chirp once - don't want to burn through API calls
         // also would have to implement a thingy which waits for previous chirp to complete
         visitorCheckedIn = true;
+        String dbgmsg = "patient checked in, CHIRP CHIRP [" + officePatientCheckins + "]";
         Toast.makeText(getApplicationContext(), "patient checked in, CHIRP CHIRP [" + officePatientCheckins + "]", Toast.LENGTH_LONG).show();
-        if(officePatientCheckins == 1){
+        Log.d(getApplicationContext().getPackageName(), dbgmsg);
+//        if(officePatientCheckins == 1){
           // reply with office id
           createChirpOffline(BROADCAST_ID_OFFICE);
           // update display
-          app.adapter.add(new ChirpMessage(ChirpMessage.Type.RECEIVED, "patient checkin: " + chirpId, chirpId));
-        }
-      }
+          final String updateMsg = "patient checkin: " + chirpId;
+          //app.adapter.add(new ChirpMessage(ChirpMessage.Type.RECEIVED, "patient checkin: " + chirpId, chirpId));
+          runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                  app.adapter.add(new ChirpMessage(ChirpMessage.Type.SENT, updateMsg, chirpId));
+              }
+          });
+//        }
+//      }
     }
     // PATIENT processing - when received stop chirping, display "checked in"
     // demo: just receive the chirp and display 'checked in'
     if( chirpId.equals(BROADCAST_ID_OFFICE) ){
       officeBroadCasts++;
-      if(! visitorCheckedIn){ // only update display once, what the heck
+// something is preventing this from working correctly, disabling
+//      if(! visitorCheckedIn){ // only update display once, what the heck
         // only chirp once - don't want to burn through API calls
         // also would have to implement a thingy which waits for previous chirp to complete
         visitorCheckedIn = true;
-        Toast.makeText(getApplicationContext(), "office replied, done  [" + officeBroadCasts + "]", Toast.LENGTH_LONG).show();
-        if(officeBroadCasts == 1){
+        String dbgmsg = "office replied, done  [" + officeBroadCasts + "]";
+        Toast.makeText(getApplicationContext(), dbgmsg, Toast.LENGTH_LONG).show();
+        Log.d(getApplicationContext().getPackageName(), dbgmsg);
+//        if(officeBroadCasts == 1){
           //can't think of a reason to chirp anything
           //createChirpOffline(BROADCAST_ID_OFFICE);
           // update display
-          app.adapter.add(new ChirpMessage(ChirpMessage.Type.RECEIVED, "office reply: " + chirpId, chirpId));
-        }
-      }
+          final String updateMsg = "office reply: " + chirpId;
+          //app.adapter.add(new ChirpMessage(ChirpMessage.Type.RECEIVED, "office reply: " + chirpId, chirpId));
+          runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                  app.adapter.add(new ChirpMessage(ChirpMessage.Type.SENT, updateMsg, chirpId));
+              }
+          });
+//        }
+//      }
     }
   }
 }

@@ -42,3 +42,8 @@
       </trkseg>
 </trk>
 </gpx>
+<!-- for the office client, set it all up real nice like with
+# run mockgeofix
+telnet <ip> 5554
+geo fix -97.7331734 30.2758021
+-->
