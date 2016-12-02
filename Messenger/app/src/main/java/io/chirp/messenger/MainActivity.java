@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity
         //    Log.d(TAG, "launching location activity");
         @Override
         public void onClick(View v) {
-          forceLocationUpdate(MainActivity.this);
+          forceLocationUpdateVerbose(MainActivity.this);
           //startLocationActivity();
         }
       });

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +28,18 @@ public class LocationTestActivity extends Activity {
     setContentView(R.layout.activity_location);
     //setContentView(R.layout.activity_main);
 
-    // always force an update
+    // always force an update - blocking call, return to Main after a few seconds
+    // return after 2 seconds - main calls this every 10s
+    /*
+    int timeout = 10 * 1000; // main calls this every 10s
+    Handler handler = new Handler();
+    handler.postDelayed(new Runnable() {
+      public void run(){
+        Log.d(TAG, "switching back to main");
+        startMainActivity();
+      }
+    },timeout);
+    */
     //LocationLibrary.forceLocationUpdate(LocationTestActivity.this);
     forceLocationUpdate(LocationTestActivity.this);
     ((Button) findViewById(R.id.location_refresh)).setOnClickListener(new OnClickListener() {
@@ -136,6 +148,10 @@ public class LocationTestActivity extends Activity {
     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
     intent.putExtra("LAT", locationInfo.lastLat);
     intent.putExtra("LONG", locationInfo.lastLong);
+    startActivity(intent);
+  }
+  private void startMainActivity(){
+    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
     startActivity(intent);
   }
 }
