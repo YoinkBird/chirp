@@ -316,6 +316,12 @@ public class MainActivity extends AppCompatActivity
           visitorCheckedIn = false;
           officePatientCheckins = 0; // '2' disables chirp
           officeBroadCasts = 0;
+          runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                  app.adapter.clear();
+              }
+          });
         }
       });
     }
