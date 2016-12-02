@@ -80,6 +80,19 @@
             android:background="@drawable/chirp_button"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="7dp" />
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="0.3"
+            android:id="@+id/chirpButton3"
+            android:contentDescription="@string/chirpButton"
+            android:onClick="onClick"
+            android:src="@drawable/flash"
+            android:scaleType="centerInside"
+            android:tint="#000000"
+            android:background="@drawable/chirp_button"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="7dp" />
 
 
 

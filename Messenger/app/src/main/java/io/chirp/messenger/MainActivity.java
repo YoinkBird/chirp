@@ -65,10 +65,15 @@ public class MainActivity extends AppCompatActivity
 
     private static final int RESULT_REQUEST_RECORD_AUDIO = 0;
     private static final String TAG = "Messenger";
-    public final static String BROADCAST_ID = "doctorpaul";
+    public final static String BROADCAST_ID_OFFICE = "doctorpaul";
+    public final static String BROADCAST_ID_VISITOR = "randomanon";
     // for demo: vars used to ensure that chirp is only called once
     public static boolean inOffice = false;
-    public static int     officeGpsCheckins = 2; // '2' disables chirp
+    public static int     officeGpsCheckins = 0; // '2' disables chirp
+    public static boolean visitorCheckedIn = false;
+    public static int     officePatientCheckins = 0; // '2' disables chirp
+    // recevied chirps from the office
+    public static int     officeBroadCasts = 0;
 
     private MessengerApplication app;
     private ChirpSDK chirpSDK;
@@ -89,12 +94,15 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "onChirpHeard: " + chirp.getIdentifier());
 
             //readChirpOnline(chirp);
-            readChirpOffline(chirp);
+            String incomingId = readChirpOffline(chirp);
+
+            // process the id
+            processIncomingChirp(incomingId);
 
             // SEND LOCATION TO "SERVER" once the beacon is received
             // chirp is the beacon, for now don't check which one
             // launch the location activity in order to send the current GPS coordinates
-            startLocationActivity();
+            // startLocationActivity();
         }
 
         /*------------------------------------------------------------------------------
@@ -271,23 +279,24 @@ public class MainActivity extends AppCompatActivity
 
     private void setupButtonListeners(){
       // button to send a chirp
+      // here: visitor manual check-in
       ((ImageButton) findViewById(R.id.chirpButton)).setOnClickListener(new OnClickListener() {
         public void onClick(View view) {
-            String sendText;
-//          String sendText = ((TextView) findViewById(R.id.sendText)).getText().toString();
-          // hack for dev - send the broadcast id when the button is pressed
-//          if (sendText.length() == 0){
-            sendText = BROADCAST_ID;
-            //return;
-//          }
-
-//          ((TextView) findViewById(R.id.sendText)).setText("");
+          String sendText = BROADCAST_ID_VISITOR;
           // createChirpOnline(sendText);
           createChirpOffline(sendText);
-
         }
       });
-      // button to open the location activity
+      // button to send a chirp
+      // here: office manual reply
+      ((ImageButton) findViewById(R.id.chirpButton)).setOnClickListener(new OnClickListener() {
+        public void onClick(View view) {
+          String sendText = BROADCAST_ID_OFFICE;
+          // createChirpOnline(sendText);
+          createChirpOffline(sendText);
+        }
+      });
+      // button to force location update
       ((ImageButton) findViewById(R.id.chirpButton2)).setOnClickListener(new OnClickListener() {
         //    Log.d(TAG, "launching location activity");
         @Override
@@ -446,7 +455,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // offline chirps
-    private void readChirpOffline(final Chirp chirp)
+    private String readChirpOffline(final Chirp chirp)
     {
       /*------------------------------------------------------------------------------
        * As soon as we hear a chirp, query the API for its associated data.
@@ -464,8 +473,8 @@ public class MainActivity extends AppCompatActivity
         });
         //            } catch (JSONException e) {
         //                Log.d(TAG, e.toString());
-        }
-
+        return receivedText;
+      }
     }
     private void startLocationActivity(){
       Intent intent = new Intent(getApplicationContext(), LocationTestActivity.class);
@@ -509,7 +518,7 @@ public class MainActivity extends AppCompatActivity
           inOffice = true;
           Toast.makeText(getApplicationContext(), "in office CHIRP CHIRP [" + officeGpsCheckins + "]", Toast.LENGTH_LONG).show();
           if(officeGpsCheckins == 1){
-            createChirpOffline(BROADCAST_ID);
+            createChirpOffline(BROADCAST_ID_VISITOR);
           }
         }
       }
@@ -569,5 +578,48 @@ public class MainActivity extends AppCompatActivity
   }
   private void forceLocationUpdate(Context context){
     LocationLibrary.forceLocationUpdate(context);
+  }
+
+  // What to do once a beacon (chirp) is received?
+  // PATIENT: verify that beacon matches expected appointment
+  // OFFICE: send incomping BROADCAST_ID_VISITOR to server to finalise checkin
+  // For Demo:
+  // PATIENT: display the beacon value
+  // OFFICE: display the beacon value
+  private void processIncomingChirp(String chirpId){
+    Toast.makeText(getApplicationContext(), "processIncomingChirp " + chirpId, Toast.LENGTH_LONG).show();
+    // OFFICE processing - chirp back if visitor id received
+    if( chirpId.equals(BROADCAST_ID_VISITOR) ){
+      officePatientCheckins++;
+      if(! visitorCheckedIn){
+        // only chirp once - don't want to burn through API calls
+        // also would have to implement a thingy which waits for previous chirp to complete
+        visitorCheckedIn = true;
+        Toast.makeText(getApplicationContext(), "patient checked in, CHIRP CHIRP [" + officePatientCheckins + "]", Toast.LENGTH_LONG).show();
+        if(officePatientCheckins == 1){
+          // reply with office id
+          createChirpOffline(BROADCAST_ID_OFFICE);
+          // update display
+          app.adapter.add(new ChirpMessage(ChirpMessage.Type.RECEIVED, "patient checkin: " + chirpId, chirpId));
+        }
+      }
+    }
+    // PATIENT processing - when received stop chirping, display "checked in"
+    // demo: just receive the chirp and display 'checked in'
+    if( chirpId.equals(BROADCAST_ID_OFFICE) ){
+      officeBroadCasts++;
+      if(! visitorCheckedIn){ // only update display once, what the heck
+        // only chirp once - don't want to burn through API calls
+        // also would have to implement a thingy which waits for previous chirp to complete
+        visitorCheckedIn = true;
+        Toast.makeText(getApplicationContext(), "office replied, done  [" + officeBroadCasts + "]", Toast.LENGTH_LONG).show();
+        if(officeBroadCasts == 1){
+          //can't think of a reason to chirp anything
+          //createChirpOffline(BROADCAST_ID_OFFICE);
+          // update display
+          app.adapter.add(new ChirpMessage(ChirpMessage.Type.RECEIVED, "office reply: " + chirpId, chirpId));
+        }
+      }
+    }
   }
 }
