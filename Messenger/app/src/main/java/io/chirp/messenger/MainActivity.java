@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity
     private void setupButtonListeners(){
       // button to send a chirp
       // here: visitor manual check-in
-      ((ImageButton) findViewById(R.id.chirpButton)).setOnClickListener(new OnClickListener() {
+      ((Button) findViewById(R.id.chirpButton)).setOnClickListener(new OnClickListener() {
         public void onClick(View view) {
           String sendText = BROADCAST_ID_VISITOR;
           // createChirpOnline(sendText);
@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity
       });
       // button to send a chirp
       // here: office manual reply
-      ((ImageButton) findViewById(R.id.chirpButton3)).setOnClickListener(new OnClickListener() {
+      ((Button) findViewById(R.id.chirpButton3)).setOnClickListener(new OnClickListener() {
         public void onClick(View view) {
           String sendText = BROADCAST_ID_OFFICE;
           // createChirpOnline(sendText);
@@ -297,12 +297,25 @@ public class MainActivity extends AppCompatActivity
         }
       });
       // button to force location update
-      ((ImageButton) findViewById(R.id.chirpButton2)).setOnClickListener(new OnClickListener() {
+      ((Button) findViewById(R.id.chirpButton2)).setOnClickListener(new OnClickListener() {
         //    Log.d(TAG, "launching location activity");
         @Override
         public void onClick(View v) {
           forceLocationUpdateVerbose(MainActivity.this);
           //startLocationActivity();
+        }
+      });
+      // button to reset client checkin
+      ((Button) findViewById(R.id.chirpButton4)).setOnClickListener(new OnClickListener() {
+        //    Log.d(TAG, "launching location activity");
+        @Override
+        public void onClick(View v) {
+          //startLocationActivity();
+          inOffice = false;
+          officeGpsCheckins = 0; // '2' disables chirp
+          visitorCheckedIn = false;
+          officePatientCheckins = 0; // '2' disables chirp
+          officeBroadCasts = 0;
         }
       });
     }
@@ -529,42 +542,7 @@ public class MainActivity extends AppCompatActivity
       }
       // now decide whether to listen for chirp or not, etc
     }
-//    final TextView locationTextView = (TextView) findViewById(R.id.location_title);
 
-/*
-    if (locationInfo.anyLocationDataReceived()) {
-      locationTable.setVisibility(View.VISIBLE);
-      ((TextView)findViewById(R.id.location_timestamp)).setText(LocationInfo.formatTimeAndDay(locationInfo.lastLocationUpdateTimestamp, true));
-      ((TextView)findViewById(R.id.location_latitude)).setText(Float.toString(locationInfo.lastLat));
-      ((TextView)findViewById(R.id.location_longitude)).setText(Float.toString(locationInfo.lastLong));
-      ((TextView)findViewById(R.id.location_accuracy)).setText(Integer.toString(locationInfo.lastAccuracy) + "m");
-      ((TextView)findViewById(R.id.location_provider)).setText(locationInfo.lastProvider);
-      if (locationInfo.hasLatestDataBeenBroadcast()) {
-        locationTextView.setText("Latest location has been broadcast");
-      }
-      else {
-        locationTextView.setText("Location broadcast pending (last " + LocationInfo.formatTimeAndDay(locationInfo.lastLocationUpdateTimestamp, true) + ")");
-      }
-      buttonShowMap.setVisibility(View.VISIBLE);
-      buttonShowMap.setOnClickListener(new OnClickListener() {
-        public void onClick(View v) {
-          Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + locationInfo.lastLat + "," + locationInfo.lastLong + "?q=" + locationInfo.lastLat + "," + locationInfo.lastLong + "(" + locationInfo.lastAccuracy + "m at " + LocationInfo.formatTimeAndDay(locationInfo.lastLocationUpdateTimestamp, true) + ")"));
-          startActivity(intent);
-        }
-      });
-      buttonSendGPS.setVisibility(View.VISIBLE);
-      buttonSendGPS.setOnClickListener(new OnClickListener() {
-        public void onClick(View v) {
-          sendLocationToActivity(locationInfo);
-        }
-      });
-    }
-    else {
-      locationTable.setVisibility(View.GONE);
-      buttonShowMap.setVisibility(View.GONE);
-      locationTextView.setText("No locations recorded yet");
-    }
-*/
   };
   private final BroadcastReceiver lftBroadcastReceiver = new BroadcastReceiver() {
     @Override

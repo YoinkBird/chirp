@@ -67,27 +67,25 @@
         android:layout_alignParentEnd="true"
         android:id="@+id/linearLayout">
 
-        <ImageButton
+        <Button
             android:layout_width="0dp"
-            android:layout_height="35dp"
+            android:layout_height="50dp"
             android:layout_weight="0.3"
             android:id="@+id/chirpButton"
-            android:contentDescription="@string/chirpButton"
+            android:text="visitor chirp-in"
             android:onClick="onClick"
-            android:src="@drawable/flash"
-            android:scaleType="centerInside"
             android:tint="#000000"
             android:background="@drawable/chirp_button"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="7dp" />
-        <ImageButton
+        <Button
             android:layout_width="0dp"
-            android:layout_height="35dp"
+            android:layout_height="50dp"
             android:layout_weight="0.3"
             android:id="@+id/chirpButton3"
+            android:text="office chirp-in"
             android:contentDescription="@string/chirpButton"
             android:onClick="onClick"
-            android:src="@drawable/flash"
             android:scaleType="centerInside"
             android:tint="#000000"
             android:background="@drawable/chirp_button"
@@ -107,15 +105,24 @@
         android:layout_alignParentEnd="true"
         android:id="@+id/linearLayout2">
 
-        <ImageButton
+        <Button
             android:layout_width="0dp"
-            android:layout_height="35dp"
+            android:layout_height="50dp"
             android:layout_weight="0.3"
             android:id="@+id/chirpButton2"
-            android:contentDescription="@string/chirpButton"
+            android:text="force location"
             android:onClick="onClick"
-            android:src="@drawable/flash"
-            android:scaleType="centerInside"
+            android:tint="#000000"
+            android:background="@drawable/chirp_button"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="7dp" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="0.3"
+            android:id="@+id/chirpButton4"
+            android:text="reset chirp-ins"
+            android:onClick="onClick"
             android:tint="#000000"
             android:background="@drawable/chirp_button"
             android:layout_gravity="bottom|right"
