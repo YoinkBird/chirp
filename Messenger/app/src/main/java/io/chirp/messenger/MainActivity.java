@@ -66,6 +66,9 @@ public class MainActivity extends AppCompatActivity
     private static final int RESULT_REQUEST_RECORD_AUDIO = 0;
     private static final String TAG = "Messenger";
     public final static String BROADCAST_ID = "doctorpaul";
+    // for demo: vars used to ensure that chirp is only called once
+    public static boolean inOffice = false;
+    public static int     officeGpsCheckins = 0;
 
     private MessengerApplication app;
     private ChirpSDK chirpSDK;
@@ -496,6 +499,20 @@ public class MainActivity extends AppCompatActivity
 //verbose_as_hell      Toast.makeText(getApplicationContext(), msg , Toast.LENGTH_LONG).show();
       Log.d(TAG, myLocation.is_punctual_friendly() );
       ((TextView)findViewById(R.id.location_status)).setText(msg);
+      // AND NOW FOR MY NEXT TRICK
+      // if close enough, start chirping like a crazy
+      if( myLocation.is_punctual()){
+        officeGpsCheckins++;
+        if(! inOffice){
+          // only chirp once - don't want to burn through API calls
+          // also would have to implement a thingy which waits for previous chirp to complete
+          inOffice = true;
+          Toast.makeText(getApplicationContext(), "in office CHIRP CHIRP [" + officeGpsCheckins + "]", Toast.LENGTH_LONG).show();
+          if(officeGpsCheckins == 1){
+            createChirpOffline(BROADCAST_ID);
+          }
+        }
+      }
       // now decide whether to listen for chirp or not, etc
     }
 //    final TextView locationTextView = (TextView) findViewById(R.id.location_title);
