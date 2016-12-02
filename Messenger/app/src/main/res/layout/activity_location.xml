@@ -26,15 +26,15 @@
     </TableRow>
 
     <TableRow>
-      <TextView android:layout_column="1" android:text="Latitude"
-        android:padding="3dip" />
-      <TextView android:id="@+id/location_latitude"
-        android:gravity="right" android:padding="3dip" />
-    </TableRow>
-    <TableRow>
       <TextView android:layout_column="1" android:text="Longitude"
         android:padding="3dip" />
       <TextView android:id="@+id/location_longitude"
+        android:gravity="right" android:padding="3dip" />
+    </TableRow>
+    <TableRow>
+      <TextView android:layout_column="1" android:text="Latitude"
+        android:padding="3dip" />
+      <TextView android:id="@+id/location_latitude"
         android:gravity="right" android:padding="3dip" />
     </TableRow>
     <TableRow>

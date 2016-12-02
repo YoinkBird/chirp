@@ -11,21 +11,34 @@
 package io.chirp.messenger;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,10 +50,15 @@ import org.json.JSONObject;
 import io.chirp.sdk.CallbackCreate;
 import io.chirp.sdk.CallbackRead;
 import io.chirp.sdk.ChirpSDK;
-import io.chirp.sdk.ChirpSDKListener;
 import io.chirp.sdk.ChirpSDKHelpers;
+import io.chirp.sdk.ChirpSDKListener;
 import io.chirp.sdk.model.Chirp;
 import io.chirp.sdk.model.ChirpError;
+
+import com.littlefluffytoys.littlefluffylocationlibrary.LocationInfo;
+import com.littlefluffytoys.littlefluffylocationlibrary.LocationLibrary;
+import com.littlefluffytoys.littlefluffylocationlibrary.LocationLibraryConstants;
+
 
 public class MainActivity extends AppCompatActivity
 {
@@ -112,6 +130,31 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         chirp_onCreate();
         setupButtonListeners();
+        // call the gps after 10 seconds
+        // super bad, yes, but if I could get the handler to work I wouldn't have to do this.
+        int timeout = 2 * 1000; // LocationTestActivity returns after 2s
+       final Handler handler = new Handler();
+            final Runnable gps_force = new Runnable() {
+          public void run(){
+            //super annoying Toast.makeText(getApplicationContext(), "postDelayed", Toast.LENGTH_LONG).show();
+            //Log.d(TAG, "onCreate handler, getting GPS");
+            // startLocationActivity();
+            forceLocationUpdate(MainActivity.this);
+            /*
+            Log.d(TAG, "calling LocationTestActivity, getting GPS");
+            LocationInfo locationInfo = new LocationInfo(MainActivity.this);
+            if (locationInfo.anyLocationDataReceived()) {
+              String gps_info = "LAT: " + locationInfo.lastLat + ",LONG: " + locationInfo.lastLong;
+              Log.d(TAG, "got data: " + gps_info);
+              Log.d(TAG, "chirp received GPS " + gps_info);
+
+            }
+            */
+            handler.postDelayed(this,2);
+          }
+        };
+        handler.postDelayed(gps_force, timeout);
+
 
     }
 
@@ -188,7 +231,22 @@ public class MainActivity extends AppCompatActivity
         if (doWeHaveRecordAudioPermission()) {
             chirpSDK.start();
         }
+    location_onResume();
     }
+
+  public void location_onResume() {
+    String message = "location_onResume has been called";
+    Log.d(getApplicationContext().getPackageName(), message);
+    // cancel any notification we may have received from LocationTestBroadcastReceiver
+    ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(1234);
+
+    // location_refreshDisplay();
+
+    // This demonstrates how to dynamically create a receiver to listen to the location updates.
+    // You could also register a receiver in your manifest.
+    final IntentFilter lftIntentFilter = new IntentFilter(LocationLibraryConstants.getLocationChangedPeriodicBroadcastAction());
+    registerReceiver(lftBroadcastReceiver, lftIntentFilter);
+  }
 
     @Override
     protected void onPause() {
@@ -200,21 +258,27 @@ public class MainActivity extends AppCompatActivity
          * background. 
          *----------------------------------------------------------------------------*/
         chirpSDK.stop();
-    }
+        location_onPause();
+  }
+
+  public void location_onPause() {
+    unregisterReceiver(lftBroadcastReceiver);
+  }
 
 
     private void setupButtonListeners(){
       // button to send a chirp
       ((ImageButton) findViewById(R.id.chirpButton)).setOnClickListener(new OnClickListener() {
         public void onClick(View view) {
-          String sendText = ((TextView) findViewById(R.id.sendText)).getText().toString();
+            String sendText;
+//          String sendText = ((TextView) findViewById(R.id.sendText)).getText().toString();
           // hack for dev - send the broadcast id when the button is pressed
-          if (sendText.length() == 0){
+//          if (sendText.length() == 0){
             sendText = BROADCAST_ID;
             //return;
-          }
+//          }
 
-          ((TextView) findViewById(R.id.sendText)).setText("");
+//          ((TextView) findViewById(R.id.sendText)).setText("");
           // createChirpOnline(sendText);
           createChirpOffline(sendText);
 
@@ -225,7 +289,8 @@ public class MainActivity extends AppCompatActivity
         //    Log.d(TAG, "launching location activity");
         @Override
         public void onClick(View v) {
-          startLocationActivity();
+          forceLocationUpdate(MainActivity.this);
+          //startLocationActivity();
         }
       });
     }
@@ -403,4 +468,89 @@ public class MainActivity extends AppCompatActivity
       Intent intent = new Intent(getApplicationContext(), LocationTestActivity.class);
       startActivity(intent);
     }
+
+  private void location_refreshDisplay(final LocationInfo locationInfo) {
+    final View locationTable = findViewById(R.id.location_table);
+    final Button buttonShowMap = (Button) findViewById(R.id.location_showmap);
+    final Button buttonSendGPS = (Button) findViewById(R.id.location_send_gps);
+
+    Log.d(TAG, "entering location_refreshDisplay");
+//verbose_as_hell    Toast.makeText(getApplicationContext(), "location_refreshDisplay", Toast.LENGTH_LONG).show();
+    if (locationInfo.anyLocationDataReceived()) {
+      String gps_info = "LAT: " + locationInfo.lastLat + ",LONG: " + locationInfo.lastLong;
+      Log.d(TAG, "got data: " + gps_info);
+      Log.d(TAG, "chirp received GPS " + gps_info);
+//verbose_as_hell      Toast.makeText(getApplicationContext(), gps_info, Toast.LENGTH_LONG).show();
+
+      // Timestamp
+      ((TextView)findViewById(R.id.location_timestamp)).setText(LocationInfo.formatTimeAndDay(locationInfo.lastLocationUpdateTimestamp, true));
+      // Lat
+      ((TextView)findViewById(R.id.location_latitude)).setText(Float.toString(locationInfo.lastLat));
+      // Lon
+      ((TextView)findViewById(R.id.location_longitude)).setText(Float.toString(locationInfo.lastLong));
+
+      // update 
+      LocationState myLocation = new LocationState(locationInfo.lastLat, locationInfo.lastLong);
+      // Log.d(TAG, Integer.toString( myLocation.is_punctual() ) );
+      String msg = myLocation.is_punctual_friendly();
+//verbose_as_hell      Toast.makeText(getApplicationContext(), msg , Toast.LENGTH_LONG).show();
+      Log.d(TAG, myLocation.is_punctual_friendly() );
+      ((TextView)findViewById(R.id.location_status)).setText(msg);
+      // now decide whether to listen for chirp or not, etc
+    }
+//    final TextView locationTextView = (TextView) findViewById(R.id.location_title);
+
+/*
+    if (locationInfo.anyLocationDataReceived()) {
+      locationTable.setVisibility(View.VISIBLE);
+      ((TextView)findViewById(R.id.location_timestamp)).setText(LocationInfo.formatTimeAndDay(locationInfo.lastLocationUpdateTimestamp, true));
+      ((TextView)findViewById(R.id.location_latitude)).setText(Float.toString(locationInfo.lastLat));
+      ((TextView)findViewById(R.id.location_longitude)).setText(Float.toString(locationInfo.lastLong));
+      ((TextView)findViewById(R.id.location_accuracy)).setText(Integer.toString(locationInfo.lastAccuracy) + "m");
+      ((TextView)findViewById(R.id.location_provider)).setText(locationInfo.lastProvider);
+      if (locationInfo.hasLatestDataBeenBroadcast()) {
+        locationTextView.setText("Latest location has been broadcast");
+      }
+      else {
+        locationTextView.setText("Location broadcast pending (last " + LocationInfo.formatTimeAndDay(locationInfo.lastLocationUpdateTimestamp, true) + ")");
+      }
+      buttonShowMap.setVisibility(View.VISIBLE);
+      buttonShowMap.setOnClickListener(new OnClickListener() {
+        public void onClick(View v) {
+          Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + locationInfo.lastLat + "," + locationInfo.lastLong + "?q=" + locationInfo.lastLat + "," + locationInfo.lastLong + "(" + locationInfo.lastAccuracy + "m at " + LocationInfo.formatTimeAndDay(locationInfo.lastLocationUpdateTimestamp, true) + ")"));
+          startActivity(intent);
+        }
+      });
+      buttonSendGPS.setVisibility(View.VISIBLE);
+      buttonSendGPS.setOnClickListener(new OnClickListener() {
+        public void onClick(View v) {
+          sendLocationToActivity(locationInfo);
+        }
+      });
+    }
+    else {
+      locationTable.setVisibility(View.GONE);
+      buttonShowMap.setVisibility(View.GONE);
+      locationTextView.setText("No locations recorded yet");
+    }
+*/
+  };
+  private final BroadcastReceiver lftBroadcastReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      // extract the location info in the broadcast
+      final LocationInfo locationInfo = (LocationInfo) intent.getSerializableExtra(LocationLibraryConstants.LOCATION_BROADCAST_EXTRA_LOCATIONINFO);
+      // refresh the display with it
+      location_refreshDisplay(locationInfo);
+    }
+  };
+  private void forceLocationUpdateVerbose(Context context){
+    String message = "Forcing a location update";
+    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    Log.d(getApplicationContext().getPackageName(), message);
+    forceLocationUpdate(context);
+  }
+  private void forceLocationUpdate(Context context){
+    LocationLibrary.forceLocationUpdate(context);
+  }
 }

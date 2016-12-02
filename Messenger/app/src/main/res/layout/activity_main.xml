@@ -10,10 +10,46 @@
     tools:context="io.chirp.messenger.MainActivity"
     android:background="@color/colorPrimaryLight">
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/location_table2"
+        android:layout_alignParentStart="true">
+    <TableRow>
+      <TextView android:layout_column="1" android:text="Longitude"
+        android:padding="3dip" />
+      <TextView android:id="@+id/location_longitude"
+        android:gravity="right" android:padding="3dip" />
+    </TableRow>
+    <TableRow>
+      <TextView android:layout_column="1" android:text="Latitude"
+        android:padding="3dip" />
+      <TextView android:id="@+id/location_latitude"
+        android:gravity="right" android:padding="3dip" />
+    </TableRow>
+    <TableRow>
+      <TextView android:layout_column="1" android:text="Status:"
+        android:padding="3dip" />
+      <TextView android:id="@+id/location_status"
+        android:gravity="right" android:padding="3dip" />
+    </TableRow>
+    <TableRow>
+      <TextView android:layout_column="1" android:text="Timestamp"
+        android:padding="3dip" />
+      <TextView android:id="@+id/location_timestamp"
+        android:gravity="right" android:padding="3dip" />
+    </TableRow>
+
+
+
+    </TableLayout>
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/receiveView"
+        android:layout_below="@+id/location_table2"
         android:layout_above="@+id/linearLayout"
         android:stackFromBottom="true"
         android:dividerHeight="3dp"
@@ -30,16 +66,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/linearLayout">
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="5"
-            android:inputType="textMultiLine"
-            android:id="@+id/sendText"
-            android:layout_gravity="left|bottom"
-            android:layout_weight="0.7"
-            android:textColor="@color/colorAccent" />
 
         <ImageButton
             android:layout_width="0dp"
