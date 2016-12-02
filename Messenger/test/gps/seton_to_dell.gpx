@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPS Visualizer Sandbox http://www.gpsvisualizer.com/draw/" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+	<wpt lat="30.3043543" lon="-97.7455759">
+		<name>seton main</name>
+	</wpt>
+	<wpt lat="30.2758021" lon="-97.7331734">
+		<name>dell teaching</name>
+	</wpt>
+<trk>
+  <name>Seton Main to Dell Teaching</name>
+  <desc>3.0 km, 0:37</desc>
+  <trkseg>
+	<trkpt lat="30.3051694" lon="-97.7430010">
+	</trkpt>
+	<trkpt lat="30.3026870" lon="-97.7380228">
+	</trkpt>
+	<trkpt lat="30.2953504" lon="-97.7429581">
+	</trkpt>
+        <trkpt lat="30.291941" lon="-97.741113"></trkpt>
+	<trkpt lat="30.2818616" lon="-97.7419281">
+	</trkpt>
+        <!-- good trajectory -->
+	<trkpt lat="30.2797121" lon="-97.7356195"> </trkpt>
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+	<trkpt lat="30.2762654" lon="-97.7369928">
+        <!-- close enough -->
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+        <trkpt lat="30.275413" lon="-97.733388"></trkpt>
+	</trkpt>
+      </trkseg>
+</trk>
+</gpx>
